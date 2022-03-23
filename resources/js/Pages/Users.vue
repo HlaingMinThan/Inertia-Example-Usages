@@ -1,5 +1,13 @@
 <template>
-  <h1 class="text-3xl font-bold">Users</h1>
+  <div class="flex justify-between">
+    <h1 class="text-3xl font-bold">Users</h1>
+    <input
+      type="search"
+      v-model="search"
+      placeholder="search..."
+      class="border-2 p-1 rounded-md"
+    />
+  </div>
   <Head>
     <title>Users</title>
   </Head>
@@ -79,6 +87,21 @@
   <Pagination :links="users.links"></Pagination>
 </template>
 <script setup>
+import { ref } from "@vue/reactivity";
+import { watch } from "vue";
+import { Inertia } from "@inertiajs/inertia";
 import Pagination from "../Shared/Pagination.vue";
-defineProps({ users: Object });
+const { filters } = defineProps({ users: Object, filters: Object });
+let search = ref(filters.search);
+let timeout;
+watch(search, () => {
+  clearTimeout(timeout);
+  setTimeout(() => {
+    Inertia.get(
+      "/users",
+      { search: search.value },
+      { preserveState: true, replace: true }
+    );
+  }, 500);
+});
 </script>
