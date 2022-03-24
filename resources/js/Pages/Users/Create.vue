@@ -142,6 +142,7 @@
               duration-150
               ease-in-out
             "
+            :disabled="form.processing"
           >
             create
           </button>
@@ -152,18 +153,17 @@
 </template>
 
 <script setup>
-import { Inertia } from "@inertiajs/inertia";
-import { reactive } from "@vue/reactivity";
+import { useForm } from "@inertiajs/inertia-vue3";
 
 defineProps({ errors: Object });
 
-let form = reactive({
+let form = useForm({
   name: "",
   email: "",
   password: "",
 });
 
 let submit = () => {
-  Inertia.post("/users/store", form);
+  form.post("/users/store", form);
 };
 </script>
