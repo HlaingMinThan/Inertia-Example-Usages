@@ -1,6 +1,34 @@
 <template>
   <div class="flex justify-between">
-    <h1 class="text-3xl font-bold">Users</h1>
+    <div class="flex items-center">
+      <h1 class="text-3xl font-bold">Users</h1>
+      <Link
+        href="/users/create"
+        type="button"
+        class="
+          ml-2
+          inline-block
+          px-6
+          py-2.5
+          bg-blue-600
+          text-white
+          font-medium
+          text-xs
+          leading-tight
+          uppercase
+          rounded
+          shadow-md
+          hover:bg-blue-700 hover:shadow-lg
+          focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0
+          active:bg-blue-800 active:shadow-lg
+          transition
+          duration-150
+          ease-in-out
+        "
+      >
+        Create User
+      </Link>
+    </div>
     <input
       type="search"
       v-model="search"
@@ -90,7 +118,7 @@
 import { ref } from "@vue/reactivity";
 import { watch } from "vue";
 import { Inertia } from "@inertiajs/inertia";
-import Pagination from "../Shared/Pagination.vue";
+import Pagination from "../../Shared/Pagination.vue";
 const { filters } = defineProps({ users: Object, filters: Object });
 let search = ref(filters.search);
 let timeout;

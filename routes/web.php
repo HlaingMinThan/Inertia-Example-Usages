@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Validation\Rule;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,8 +19,9 @@ Route::get('/', function () {
     return inertia('Home');
 });
 Route::get('/users', function () {
-    return inertia('Users', [
+    return inertia('Users/Index', [
         'users' => User::query()
+            ->latest()
             ->when(request('search') ?? null, function ($query, $search) {
                 $query->where('name', 'Like', '%' . $search . '%');
             })
@@ -34,6 +36,22 @@ Route::get('/users', function () {
             }),
         'filters' => request(['search'])
     ]);
+});
+
+Route::get('/users/create', function () {
+    return inertia('Users/Create');
+});
+
+Route::post('/users/store', function () {
+    $attr = request()->validate([
+        'name' => 'required',
+        'email' => ['required', 'email', Rule::unique('users', 'email')],
+        'password' => ['required', 'min:8']
+    ]);
+
+    User::create($attr);
+
+    return redirect('/users');
 });
 Route::get('/settings', function () {
     return inertia('Settings');
