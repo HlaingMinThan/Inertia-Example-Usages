@@ -2,7 +2,7 @@
   <div class="flex justify-center mt-5">
     <nav aria-label="Page navigation example">
       <ul class="flex list-style-none">
-        <li class="page-item" v-for="link in links" :key="link.url">
+        <li class="page-item" v-for="link in links" :key="link.label">
           <Link
             v-html="link.label"
             :class="{
