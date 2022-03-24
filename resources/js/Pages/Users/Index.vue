@@ -119,17 +119,19 @@ import { ref } from "@vue/reactivity";
 import { watch } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import Pagination from "../../Shared/Pagination.vue";
+import throttle from "lodash/throttle";
 const { filters } = defineProps({ users: Object, filters: Object });
 let search = ref(filters.search);
-let timeout;
-watch(search, () => {
-  clearTimeout(timeout);
-  setTimeout(() => {
+watch(
+  search,
+  throttle(() => {
+    // u can use debounce also,debounce work after you type
+    console.log("trigger"); //call only every 500 millisecond,not on every key press
     Inertia.get(
       "/users",
       { search: search.value },
       { preserveState: true, replace: true }
     );
-  }, 500);
-});
+  }, 500)
+);
 </script>
