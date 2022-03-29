@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rule;
@@ -14,6 +15,12 @@ use Illuminate\Validation\Rule;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/login', [AuthController::class, 'post_login']);
+Route::get('/register', [AuthController::class, 'register'])->name('register');
+Route::post('/register', [AuthController::class, 'post_register']);
+Route::post('/logout', [AuthController::class, 'destroy'])->middleware('auth');
 
 Route::get('/', function () {
     return inertia('Home');
@@ -36,11 +43,11 @@ Route::get('/users', function () {
             }),
         'filters' => request(['search'])
     ]);
-});
+})->middleware('auth');
 
 Route::get('/users/create', function () {
     return inertia('Users/Create');
-});
+})->middleware('auth');
 
 Route::post('/users/store', function () {
     $attr = request()->validate([
@@ -52,11 +59,7 @@ Route::post('/users/store', function () {
     User::create($attr);
 
     return redirect('/users');
-});
+})->middleware('auth');
 Route::get('/settings', function () {
     return inertia('Settings');
-});
-
-Route::post('/logout', function () {
-    dd('log out', request('name'));
-});
+})->middleware('auth');

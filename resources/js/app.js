@@ -8,7 +8,11 @@ InertiaProgress.init({
 createInertiaApp({
     resolve: async (name) => {
         const page = (await import(`./Pages/${name}`)).default;
-        page.layout = page.layout || Layout;
+        if (page.layout === null) {
+            page.layout = null; // turn off layout system by set null
+        } else {
+            page.layout = page.layout || Layout;
+        }
         return page;
     },
     setup({ el, App, props, plugin }) {
