@@ -3,6 +3,7 @@
     <div class="flex items-center">
       <h1 class="text-3xl font-bold">Users</h1>
       <Link
+        v-if="can.create"
         href="/users/create"
         type="button"
         class="
@@ -64,6 +65,12 @@
                 >
                   email
                 </th>
+                <th
+                  scope="col"
+                  class="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                >
+                  Action
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -105,6 +112,19 @@
                 >
                   {{ user.email }}
                 </td>
+                <td
+                  class="
+                    text-sm text-gray-900
+                    font-light
+                    px-6
+                    py-4
+                    whitespace-nowrap
+                  "
+                >
+                  <Link class="underline text-blue-500" v-if="user.can.edit"
+                    >Edit</Link
+                  >
+                </td>
               </tr>
             </tbody>
           </table>
@@ -120,7 +140,11 @@ import { watch } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import Pagination from "../../Shared/Pagination.vue";
 import throttle from "lodash/throttle";
-const { filters } = defineProps({ users: Object, filters: Object });
+const { filters } = defineProps({
+  users: Object,
+  filters: Object,
+  can: Object,
+});
 let search = ref(filters.search);
 watch(
   search,

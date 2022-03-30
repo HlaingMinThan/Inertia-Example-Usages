@@ -5,17 +5,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rule;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'post_login']);
 Route::get('/register', [AuthController::class, 'register'])->name('register');
@@ -39,15 +28,21 @@ Route::get('/users', function () {
                     'id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
+                    'can' => [
+                        'edit' => auth()->user()->can('edit', $user)
+                    ]
                 ];
             }),
-        'filters' => request(['search'])
+        'filters' => request(['search']),
+        'can' => [
+            'create' => auth()->user()->can('create', User::class)
+        ]
     ]);
 })->middleware('auth');
 
 Route::get('/users/create', function () {
     return inertia('Users/Create');
-})->middleware('auth');
+})->can('create', User::class)->middleware('auth');
 
 Route::post('/users/store', function () {
     $attr = request()->validate([
@@ -59,7 +54,7 @@ Route::post('/users/store', function () {
     User::create($attr);
 
     return redirect('/users');
-})->middleware('auth');
+})->can('create', User::class)->middleware('auth');
 Route::get('/settings', function () {
     return inertia('Settings');
 })->middleware('auth');
