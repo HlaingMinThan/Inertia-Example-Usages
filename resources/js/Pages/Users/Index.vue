@@ -138,7 +138,7 @@
 import { ref } from "@vue/reactivity";
 import { watch } from "vue";
 import { Inertia } from "@inertiajs/inertia";
-import Pagination from "../../Shared/Pagination.vue";
+import Pagination from "@/Shared/Pagination.vue";
 import throttle from "lodash/throttle";
 const { filters } = defineProps({
   users: Object,
